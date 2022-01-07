@@ -1,70 +1,106 @@
 /* Fill your code*/
-function check()
-{
-    let name = document.getElementById("n1").value
-    let addres = document.getElementById('n2').value
-    let Email = document.getElementById('n3').value
-    let password = document.getElementById('n4').value
-    let confirm_password = document.getElementById('n5').value
-    let phone = document.getElementById('n6').value
 
-    let email_pattern = /^[a-z]+\@[a-z]+\.(com)$/
-    let password_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
-    let phone_pattern = /^[9867]{1}[0-9]{9}$/
-    
-    if (name === "")
-    {
-        document.getElementById('r1').innerHTML = 'name should not be empty'
-    }
-    else if (name.length < 8 || name.length>15)
-    {
-        document.getElementById('r1').innerHTML = 'username should contain a minimum of 8 characters and a maximum of 15 characters'
+const pattern = {
+    username: /^[a-z\d]{8,15}$/i,
+    email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
+    password: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()]).{8,20}$/,
+    phone:/^\d{10}$/,
+}
+
+function formValidate(){
+    // values
+    let name = document.forms["RegForm"]["Name"];
+    let address = document.forms["RegForm"]["Address"];
+    let email = document.forms["RegForm"]["EMail"];
+    let password = document.forms["RegForm"]["Password"];
+    let cpassword = document.forms["RegForm"]["cPassword"];
+    let phone = document.forms["RegForm"]["phone"];
+    // error display
+    let errname = document.getElementById("name");
+    let erraddress = document.getElementById("address");
+    let erremail = document.getElementById("email");
+    let errpassword = document.getElementById("pwd");
+    let errcpassword = document.getElementById("cpwd");
+    let errphone = document.getElementById("phone");
+    let result = document.getElementById("result");
+
+    // verifing name
+    if(pattern.username.test(name.value)){
+        errname.textContent="";
     }
     else{
-        document.getElementById('r1').innerHTML = ""
+        errname.textContent="Atleast 8 to 15 Character Required";
+        name.focus();
+        return false;
     }
 
-    if (addres === "")
-    {
-        document.getElementById('r2').innerHTML = 'address should not be empty'
+    //verifing address
+    if(address.value==""){
+        erraddress.textContent="Address cannot be empty. Kindly fill ";
+        address.focus();
+        return false;
     }
     else{
-        document.getElementById('r2').innerHTML = ""
+        erraddress.textContent="";
     }
-    if (email_pattern.test(Email) === false)
-    {
-        document.getElementById('r3').innerHTML = 'enter correct email'
+
+    //verifing  email
+    if(email.value==""){
+        erremail.textContent="Email cannot be empty. Kindly fill ";
+        email.focus();
+        return false;
     }
-    else
-    {
-        document.getElementById('r3').innerHTML = ""
+    else if(pattern.email.test(email.value)){
+        erremail.textContent="";
     }
-    if (password === "")
-    {
-        document.getElementById('r4').innerHTML = 'password should not be empty'
+    else{
+        erremail.textContent="Enter a vaild Email";
+        email.focus();
+        return false;
     }
-    else if (password_pattern.test(password) === false)
-    {
-        document.getElementById('r4').innerHTML = 'password must contain 1 uppercase letter, 1 lowercase letter, atleast 1 number.'
+
+    //verifing password
+    if(password.value==""){
+        errpassword.textContent="Kindly fill the Password";
+        password.focus();
+        return false;
     }
-    else
-    {
-        document.getElementById('r4').innerHTML = ""
+    else if(pattern.password.test(password.value)){
+        errpassword.textContent="";
     }
-    if (password != confirm_password)
-    {
-        document.getElementById('r5').innerHTML = "confirm_password should be same as password"
+    else{
+        errpassword.textContent="password must contain 1 uppercase letter, 1 lowercase letter, atleast 1 number any Symbols";
+        password.focus();
+        return false;
     }
-    else
-    {
-        document.getElementById('r5').innerHTML = ""
+
+    // confirm password
+    if(cpassword.value==""){
+        errcpassword.textContent="Kindly confirm your password";
+        cpassword.focus();
+        return false;
     }
-    if (phone_pattern.test(phone) === false)
-    {
-        document.getElementById('r6').innerHTML = 'Should be a ten digit number.'
+    else if(cpassword.value==password.value){
+        errcpassword.textContent="";
+    }else{
+        errcpassword.textContent="Password and confirm password must be same";
+        cpassword.focus();
+        return false;
     }
-    else
-    {
-        document.getElementById('r6').innerHTML = ""
+    //verifing number
+    if(phone.value==""){
+        errphone.textContent="Kindly fill the phone number";
+        phone.focus();
+        return false;
+    }
+    else if(pattern.phone.test(phone.value)){
+        errphone.textContent="";
+        result.textContent="Regex validation Success";
+        return false;
+    }
+    else{
+        errphone.textContent="Enter a valid 10 digit number";
+        phone.focus();
+        return false;   
     }
 }
